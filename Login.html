@@ -14,19 +14,72 @@
       <p>Taking Service Delivery To Another Level</p>
     </div>
     <div class="login-card">
-      <form onsubmit="return validateForm()" method="post" action="login">
+      <form id="loginForm">
         <label for="email">Email</label>
         <input type="email" id="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}" maxlength="100" required>
         
         <label for="password">Password</label>
-        <input type="password" id="password" name="password"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}" maxlength="100" required>
+        <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}" maxlength="100" required>
         
         <a href="#" class="forgot-password">Forgot Password?</a>
         
         <button type="submit" class="login-button">Log In</button>
       </form>
+      <div id="loginMessage" class="login-message"></div>
     </div>
   </div>
-  <script src="script.js"></script>
+  <script src="Scripts.js"></script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+    import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyDXpT6oe6SNKk0kHJLePqlMmLnd1kRSWT8",
+      authDomain: "civicalertoriginal.firebaseapp.com",
+      databaseURL: "https://civicalertoriginal-default-rtdb.firebaseio.com",
+      projectId: "civicalertoriginal",
+      storageBucket: "civicalertoriginal.appspot.com",
+      messagingSenderId: "858192785417",
+      appId: "1:858192785417:web:424b1bec909661ab29c8d8",
+      measurementId: "G-KJ0C1TE4JS"
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+    
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const loginMessage = document.getElementById('loginMessage');
+      const dbRef = ref(database, 'Municipality/Agent');
+      
+      try {
+        const snapshot = await get(dbRef);
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          if (userData.email === email && userData.password === password) { // Assuming passwords are stored in plain text, which is not secure
+            console.log('User logged in:', userData);
+            loginMessage.textContent = 'Login successful!';
+            loginMessage.style.color = 'green';
+            window.location.href = 'dashboard.html'; // Example redirect
+          } else {
+            loginMessage.textContent = 'Error: Incorrect email or password';
+            loginMessage.style.color = 'red';
+          }
+        } else {
+          loginMessage.textContent = 'Error: User does not exist';
+          loginMessage.style.color = 'red';
+        }
+      } catch (error) {
+        console.error('Error logging in:', error);
+        loginMessage.textContent = 'Error: ' + error.message;
+        loginMessage.style.color = 'red';
+      }
+    });
+  </script>
 </body>
 </html>
