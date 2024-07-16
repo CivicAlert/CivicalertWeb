@@ -119,6 +119,7 @@ body {
 
 .report-overview {
     margin-top: 20px;
+    margin: 25px;
 }
 
 .report-overview h2 {
@@ -141,11 +142,13 @@ body {
 
 .report-details {
     display: flex;
+    margin-bottom: 10px;
     flex-direction: column;
 }
 
 .report-details h3 {
     font-size: 18px;
+    margin-bottom: 10px;
     margin-bottom: 10px;
 }
 

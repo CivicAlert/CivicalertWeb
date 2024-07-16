@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Civic Alert Dashboard</title>
     <link rel="stylesheet" href="dashboardstyling.css">
+    <style>
+        .report-card h3 {
+            margin-top: 0; /* Adjust this as needed */
+        }
+        .report-card img {
+            margin-top: 10px; /* Space between incident type and image */
+        }
+    </style>
+
 </head>
 <body>
     <div class="container">
@@ -34,29 +43,33 @@
                 <div class="stats">
                     <div class="stat">
                         <h2>Pothole</h2>
-                        <p>Reports: <span>3</span></p>
+                        <p>Reports: <span id="pothole-count">0</span></p>
                     </div>
                     <div class="stat">
                         <h2>Water</h2>
-                        <p>Reports: <span>5</span></p>
+                        <p>Reports: <span id="water-count">0</span></p>
                     </div>
                     <div class="stat">
                         <h2>Electricity</h2>
-                        <p>Reports: <span>18</span></p>
+                        <p>Reports: <span id="electricity-count">0</span></p>
                     </div>
                     <div class="stat">
                         <h2>Damaged Traffic Light</h2>
-                        <p>Reports: <span>7</span></p>
+                        <p>Reports: <span id="traffic-light-count">0</span></p>
                     </div>
                     <div class="stat">
                         <h2>Other</h2>
-                        <p>Reports: <span>12</span></p>
+                        <p>Reports: <span id="other-count">0</span></p>
                     </div>
                 </div>
                 <div class="report-overview">
                     <h2>Report Overview</h2>
                     <div class="report-card" id="report-card">
-                
+                        <h3 id="incident-type"></h3>
+                        <p><strong>Report Description:</strong><span id="report-description"></span></p>
+                        <p><strong>Location:</strong><span id="report-location"></span></p>
+                        <p><strong>Status:</strong><span id="report-status"></span></p>
+                        <p><strong>Reference Id:</strong><span id="report-ref-number"></span></p>
                     </div>
                     <div class="report-navigation" id="report-navigation">
                         <button id="prevReport">Previous</button>
@@ -67,6 +80,110 @@
             </div>
         </main>
     </div>
-    <script src="javaScript.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "civicalertoriginal.firebaseapp.com",
+            databaseURL: "https://civicalertoriginal-default-rtdb.firebaseio.com",
+            projectId: "civicalertoriginal",
+            storageBucket: "civicalertoriginal.appspot.com",
+            messagingSenderId: "858192785417",
+            appId: "1:858192785417:web:424b1bec909661ab29c8d8",
+            measurementId: "G-KJ0C1TE4JS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const incidentTypeElem = document.getElementById('incident-type');
+        const descriptionElem = document.getElementById('report-description');
+        const locationElem = document.getElementById('report-location');
+        const statusElem = document.getElementById('report-status');
+        const refNumberElem = document.getElementById('report-ref-number');
+        const potholeCountElem = document.getElementById('pothole-count');
+        const waterCountElem = document.getElementById('water-count');
+        const electricityCountElem = document.getElementById('electricity-count');
+        const trafficLightCountElem = document.getElementById('traffic-light-count');
+        const otherCountElem = document.getElementById('other-count');
+
+        let reports = [];
+        let currentIndex = 0;
+
+        function displayReport(index) {
+            const report = reports[index];
+            incidentTypeElem.textContent = report.incidentType
+            descriptionElem.textContent = report.description.slice(0,5)+ '....';
+            locationElem.textContent = report.location;
+            statusElem.textContent = report.status;
+            refNumberElem.textContent = report.refNumber;
+            if (report.imageUrl) {
+                reportImageElem.src = report.imageUrl;
+                reportImageElem.style.display = 'block';
+            } else {
+                reportImageElem.style.display = 'none';
+            }
+        }
+
+        function updateCounts() {
+            const counts = {
+                Pothole: 0,
+                Water: 0,
+                Electricity: 0,
+                "Damaged Traffic Light": 0,
+                Other: 0
+            };
+
+            reports.forEach(report => {
+                if (counts[report.incidentType] !== undefined) {
+                    counts[report.incidentType]++;
+                } else {
+                    counts.Other++;
+                }
+            });
+
+            potholeCountElem.textContent = counts.Pothole;
+            waterCountElem.textContent = counts.Water;
+            electricityCountElem.textContent = counts.Electricity;
+            trafficLightCountElem.textContent = counts["Damaged Traffic Light"];
+            otherCountElem.textContent = counts.Other;
+        }
+
+        function fetchReports() {
+            const dbRef = ref(database);
+            get(child(dbRef, 'Make Report Instance')).then((snapshot) => {
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        reports.push(childSnapshot.val());
+                    });
+                    updateCounts();
+                    displayReport(currentIndex);
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+
+        document.getElementById('nextReport').addEventListener('click', () => {
+            if (currentIndex < reports.length - 1) {
+                currentIndex++;
+                displayReport(currentIndex);
+            }
+        });
+
+        document.getElementById('prevReport').addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                displayReport(currentIndex);
+            }
+        });
+
+        // Initial fetch and display
+        fetchReports();
+    </script>
 </body>
 </html>
