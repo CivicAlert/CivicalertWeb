@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civic Alert Dashboard</title>
+    <link rel="stylesheet" href="dashboardstyling.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="Images/logo.jpg" alt="Civic Alert Logo">
+            </div>
+            <div class="profile">
+                <img src="Images/profileicon.jpeg" alt="Profile Picture">
+                <p>Municipality</p>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><button>Reports</button></li>
+                    <li><button>Dashboard</button></li>
+                    <li><button>Closed Reports</button></li>
+                    <li><button>Open Reports</button></li>
+                    <li><button>Unassigned Reports</button></li>
+                    <li><button>Assigned Reports</button></li>
+                </ul>
+            </nav>
+            <button class="logout">Log Out</button>
+        </aside>
+        <main class="main-content">
+            <div class="dashboard">
+                <h1>Dashboard</h1>
+                <div class="stats">
+                    <div class="stat">
+                        <h2>Pothole</h2>
+                        <p>Reports: <span>3</span></p>
+                    </div>
+                    <div class="stat">
+                        <h2>Water</h2>
+                        <p>Reports: <span>5</span></p>
+                    </div>
+                    <div class="stat">
+                        <h2>Electricity</h2>
+                        <p>Reports: <span>18</span></p>
+                    </div>
+                    <div class="stat">
+                        <h2>Damaged Traffic Light</h2>
+                        <p>Reports: <span>7</span></p>
+                    </div>
+                    <div class="stat">
+                        <h2>Other</h2>
+                        <p>Reports: <span>12</span></p>
+                    </div>
+                </div>
+                <div class="report-overview">
+                    <h2>Report Overview</h2>
+                    <div class="report-card" id="report-card">
+                
+                    </div>
+                    <div class="report-navigation" id="report-navigation">
+                        <button id="prevReport">Previous</button>
+                        <button id="nextReport">Next</button>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="javaScript.js"></script>
+</body>
+</html>

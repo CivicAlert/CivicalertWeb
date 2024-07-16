@@ -1,0 +1,177 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+.logo{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f5f5f5;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo img {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.nav ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+.nav li {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.nav button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    text-align: left;
+}
+
+.nav button:hover {
+    background-color: #e0e0e0;
+}
+
+.logout {
+    margin-top: auto;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    background-color: #ff0000;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.dashboard h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.stat {
+    width: 18%;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.stat h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.stat p {
+    font-size: 16px;
+}
+
+.report-overview {
+    margin-top: 20px;
+}
+
+.report-overview h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.report-card {
+    display: flex;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.report-card img {
+    width: 150px;
+    height: 150px;
+    margin-right: 20px;
+}
+
+.report-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.report-details h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.report-details p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.status {
+    color: blue;
+    cursor: pointer;
+}
+.report-navigation{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.report-navigation button {
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.report-navigation button:hover {
+    background-color: #0056b3;
+}
