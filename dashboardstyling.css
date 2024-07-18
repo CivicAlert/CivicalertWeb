@@ -126,12 +126,19 @@ body {
     font-size: 20px;
     margin-bottom: 10px;
 }
-
+.disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
 .report-card {
     display: flex;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px; /* Add space between report cards */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .report-card img {
@@ -142,19 +149,19 @@ body {
 
 .report-details {
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     flex-direction: column;
 }
 
 .report-details h3 {
     font-size: 18px;
-    margin-bottom: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .report-details p {
     font-size: 16px;
-    margin: 5px 0;
+    margin: 20px ;
 }
 
 .status {
@@ -162,7 +169,7 @@ body {
     cursor: pointer;
 }
 .report-navigation{
-    margin-top: 10px;
+    margin-top: 25px;
     display: flex;
     justify-content: space-between;
 }
@@ -172,6 +179,7 @@ body {
     border: none;
     background-color: #007bff;
     color: #fff;
+    margin: 20px;
     cursor: pointer;
 }
 
