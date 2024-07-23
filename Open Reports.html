@@ -326,17 +326,13 @@ document.getElementById('updateReportStatus').addEventListener('click', () => {
             $('#reportModal').modal('hide');
             const category = document.querySelector(`[data-report-id="${reportId}"]`).getAttribute('data-category');
             const categoryCard = document.querySelector(`[data-category="${category}"]`);
-            const reportDetails = categoryCard.querySelector(`[data-ref-number="${reportId}"] p:nth-child(7)`); // Assuming the status is the 6th <p> element
+            const reportDetails = categoryCard.querySelector(`[data-ref-number="${reportId}"] p:nth-child(6)`); // Assuming the status is the 6th <p> element
             reportDetails.textContent = `Status: ${newStatus}`;
         })
         .catch(error => {
             console.error('Error updating report status:', error);
         });
-});
-
-
-
-
+        });
 
         function toggleDetails(card) {
             const nextSibling = card.nextElementSibling;
