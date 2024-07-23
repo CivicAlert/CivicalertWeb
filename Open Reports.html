@@ -168,7 +168,6 @@
                     <select id="modalReportStatus" class="form-control">
                         <option value="Submitted">Submitted</option>
                         <option value="In Progress">In Progress</option>
-                        <option value="Resolved">Resolved</option>
                     </select>
                 </div>
             </div>
@@ -190,7 +189,7 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
+        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
         import { getStorage, ref as storageRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
 
         // Firebase configuration
@@ -276,10 +275,12 @@
             mainContent.appendChild(detailsCard);
 
             return detailsCard;
-        }   function appendReportToCategoryCard(categoryCard, report) {
-    const reportDetails = document.createElement('div');
-    reportDetails.className = 'report-details-row';
-    reportDetails.innerHTML = `
+        }   
+        
+        function appendReportToCategoryCard(categoryCard, report) {
+            const reportDetails = document.createElement('div');
+            reportDetails.className = 'report-details-row';
+           reportDetails.innerHTML = `
         <p>UserID: ${report.userUID}</p>
         <p>Category: ${report.incidentType}</p>
         <p>Date: ${report.dateTime}</p>
@@ -318,16 +319,21 @@ document.getElementById('updateReportStatus').addEventListener('click', () => {
     const newStatus = document.getElementById('modalReportStatus').value;
 
     const reportRef = ref(database, 'Make Report Instance/' + reportId);
-    update(reportRef, { incidentStatus: newStatus })
+
+    update(reportRef, { status: newStatus })  // Assuming 'status' is the field to be updated in the database
         .then(() => {
             console.log('Report status updated successfully');
-            $('#reportModal').modal('hide'); // Hide the modal
-            fetchSubmittedReports(); // Refresh the reports
+            $('#reportModal').modal('hide');
+            const category = document.querySelector(`[data-report-id="${reportId}"]`).getAttribute('data-category');
+            const categoryCard = document.querySelector(`[data-category="${category}"]`);
+            const reportDetails = categoryCard.querySelector(`[data-ref-number="${reportId}"] p:nth-child(7)`); // Assuming the status is the 6th <p> element
+            reportDetails.textContent = `Status: ${newStatus}`;
         })
         .catch(error => {
             console.error('Error updating report status:', error);
         });
 });
+
 
 
 
