@@ -62,27 +62,61 @@ function displayReports(reports) {
         const tableBody = document.createElement('tbody');
 
         groupedReports[incidentType].forEach(report => {
-            const reportRow = `
-                <tr>
-                    <td>${report.userUID}</td>
-                    <td>${report.incidentType}</td>
-                    <td>${report.dateTime}</td>
-                    <td>${report.refNumber}</td>
-                    <td>${report.location}</td>
-                    <td>${report.description}</td>
-                    <td>${report.status}</td>
-                    <td>
-                        <button>View</button>
-                        <button>Upload</button>
-                    </td>
-                </tr>
+            const reportRow = document.createElement('tr');
+            reportRow.innerHTML = `
+                <td>${report.userUID}</td>
+                <td>${report.incidentType}</td>
+                <td>${report.dateTime}</td>
+                <td>${report.refNumber}</td>
+                <td>${report.location}</td>
+                <td>${report.description}</td>
+                <td>${report.status}</td>
+                <td>
+                    <button class="view-btn" data-report='${JSON.stringify(report)}'>View</button>
+                </td>
             `;
-            tableBody.innerHTML += reportRow;
+            tableBody.appendChild(reportRow);
         });
 
         reportTable.appendChild(tableBody);
         reportSection.appendChild(reportTable);
         reportsContainer.appendChild(reportSection);
+    }
+
+    // Add event listeners to all view buttons
+    document.querySelectorAll('.view-btn').forEach(button => {
+        button.addEventListener('click', event => {
+            const report = JSON.parse(event.target.getAttribute('data-report'));
+            showModal(report);
+        });
+    });
+}
+
+function showModal(report) {
+    const modal = document.getElementById('reportModal');
+    const modalContent = document.getElementById('reportDetails');
+    
+    modalContent.innerHTML = `
+        <p><strong>UserID:</strong> ${report.userUID}</p>
+        <p><strong>Category:</strong> ${report.incidentType}</p>
+        <p><strong>Date:</strong> ${report.dateTime}</p>
+        <p><strong>Reference Number:</strong> ${report.refNumber}</p>
+        <p><strong>Location:</strong> ${report.location}</p>
+        <p><strong>Description:</strong> ${report.description}</p>
+        <p><strong>Status:</strong> ${report.status}</p>
+    `;
+
+    modal.style.display = "block";
+
+    const closeBtn = modal.querySelector('.close');
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
     }
 }
 
