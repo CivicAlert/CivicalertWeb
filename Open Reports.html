@@ -144,39 +144,42 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reportModalLabel">Report Details</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <img id="modalReportImage" src="" alt="Report Image" class="img-fluid">
-                        </div>
-                        <div class="col-md-8" id="modalReportDetails">
-                            <!-- Details will be populated here by JavaScript -->
-                            <div class="form-group">
-                                <label for="modalReportStatus">Status:</label>
-                                <select id="modalReportStatus" class="form-control">
-                                    <option value="Agent looking at it">Agent looking at it</option>
-                                    <option value="In Progress"></option>
-                                    <option value="Resolved">Resolved</option>
-                                </select>
-                            </div>
-                        </div>
+   <!-- Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportModalLabel">Report Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img id="modalReportImage" src="" alt="Report Image" class="img-fluid">
+                    </div>
+                    <div class="col-md-8" id="modalReportDetails">
+                        <!-- Details will be populated here by JavaScript -->
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Update</button>
+                <div class="form-group">
+                    <label for="modalReportStatus">Status:</label>
+                    <select id="modalReportStatus" class="form-control">
+                        <option value="Submitted">Submitted</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="updateReportStatus">Update</button>
             </div>
         </div>
     </div>
+</div>
+
     
 
     <!-- Bootstrap JS and dependencies -->
@@ -273,12 +276,10 @@
             mainContent.appendChild(detailsCard);
 
             return detailsCard;
-        }
-
-        function appendReportToCategoryCard(categoryCard, report) {
-        const reportDetails = document.createElement('div');
-        reportDetails.className = 'report-details-row';
-         reportDetails.innerHTML = `
+        }   function appendReportToCategoryCard(categoryCard, report) {
+    const reportDetails = document.createElement('div');
+    reportDetails.className = 'report-details-row';
+    reportDetails.innerHTML = `
         <p>UserID: ${report.userUID}</p>
         <p>Category: ${report.incidentType}</p>
         <p>Date: ${report.dateTime}</p>
@@ -286,12 +287,17 @@
         <p>Location: ${report.location}</p>
         <p>Description: ${report.description}</p>
         <p>Status: ${report.status}</p>
-        <button data-toggle="modal" data-target="#reportModal">View</button>
+        <button data-toggle="modal" data-target="#reportModal" data-report-id="${report.refNumber}">View</button>
     `;
+
+    // Add the report details to the category card
+    categoryCard.appendChild(reportDetails);
 
     // Add event listener to the button to populate and show the modal
     const viewButton = reportDetails.querySelector('button');
-    viewButton.addEventListener('click', () => {
+    viewButton.addEventListener('click', (event) => {
+        const reportId = event.currentTarget.getAttribute('data-report-id');
+        document.getElementById('modalReportStatus').value = report.status;
         document.getElementById('modalReportDetails').innerHTML = `
             <p><strong>UserID:</strong> ${report.userUID}</p>
             <p><strong>Category:</strong> ${report.incidentType}</p>
@@ -301,11 +307,30 @@
             <p><strong>Description:</strong> ${report.description}</p>
             <p><strong>Status:</strong> ${report.status}</p>
         `;
+        document.getElementById('updateReportStatus').setAttribute('data-report-id', reportId);
     });
 
     reportDetails.setAttribute('data-ref-number', report.refNumber);
-    categoryCard.appendChild(reportDetails);
 }
+
+document.getElementById('updateReportStatus').addEventListener('click', () => {
+    const reportId = document.getElementById('updateReportStatus').getAttribute('data-report-id');
+    const newStatus = document.getElementById('modalReportStatus').value;
+
+    const reportRef = ref(database, 'Make Report Instance/' + reportId);
+    update(reportRef, { incidentStatus: newStatus })
+        .then(() => {
+            console.log('Report status updated successfully');
+            $('#reportModal').modal('hide'); // Hide the modal
+            fetchSubmittedReports(); // Refresh the reports
+        })
+        .catch(error => {
+            console.error('Error updating report status:', error);
+        });
+});
+
+
+
 
         function toggleDetails(card) {
             const nextSibling = card.nextElementSibling;
