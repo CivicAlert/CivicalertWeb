@@ -218,12 +218,15 @@
                     const categoryCards = {};
                     Object.keys(reports).forEach(reportId => {
                         const report = reports[reportId];
+                        if (report.status === 'Submitted') { // Corrected check for status
+                            console.log('Found a submitted report:', report);
                         const category = report.incidentType;
                         if (!categoryCards[category]) {
                             categoryCards[category] = createCategoryCard(category);
                         }
                         appendReportToCategoryCard(categoryCards[category], report);
                         fetchReportImage(report.refNumber);
+                    }
                     });
                 } else {
                     console.log('No reports found.');
