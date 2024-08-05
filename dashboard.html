@@ -98,7 +98,6 @@
 
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
-
         const incidentTypeElem = document.getElementById('incident-type');
         const descriptionElem = document.getElementById('report-description');
         const locationElem = document.getElementById('report-location');
@@ -115,6 +114,7 @@
 
         function displayReport(index) {
             const report = reports[index];
+            
             incidentTypeElem.textContent = report.incidentType
             descriptionElem.textContent = report.description.slice(0,5)+ '....';
             locationElem.textContent = report.location;
