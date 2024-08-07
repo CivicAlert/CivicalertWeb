@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Civic Alert</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .logo img, .profile img {
+            width: 100%;
+            height: auto;
+        }
+        .profile p {
+            text-align: center;
+        }
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+        .nav .card {
+            aspect-ratio: 1 / 1;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-align: center;
+        }
+        .nav .card img {
+            margin-right: 5px;
+        }
+        .nav .card button {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: #007bff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .report-card {
+            border: 1px solid #ddd;
+            margin: 5px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            text-align: left;
+            padding: 10px;
+        }
+        .report-card h3 {
+            margin: 0;
+            font-size: large;
+            font-weight: bold;
+            padding-left: 35px;
+        }
+        .dropdown-arrow {
+            font-size: 18px;
+            cursor: pointer;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .report-header-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .report-header-row p {
+            margin-right: 10px;
+            padding-top: 10px;
+            font-size: large;
+            font-weight: bold;
+        }
+        .report-details-card {
+            display: none;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .report-details-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .report-details-row p {
+            margin: 0;
+            padding: 5px;
+            font-size: medium;
+            padding-bottom: 25px;
+        }
+        .report-details-row button {
+            padding: 5px 10px;
+            color: #191a1c;
+            border: 1px solid #17181a;
+            border-radius: 5px;
+            background-color: #17bbe0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-md-2 bg-light p-3 sidebar">
+                <div class="text-center mb-4 logo">
+                    <img src="logo.jpg" class="img-fluid" alt="Civic Alert Logo">
+                </div>
+                <div class="text-center mb-4 profile">
+                    <img src="profileicon.jpeg" class="img-fluid rounded-circle" alt="Profile Picture" style="width: 100px; height: 100px;">
+                    <p class="mt-2">Municipality</p>
+                </div>
+                <nav class="nav-grid">
+                    <div class="card"><button class="nav-link"><img src="reports.jpeg" height="20" width="20" class="mr-2">Reports</button></div>
+                    <div class="card"><button class="nav-link"><img src="dashboard.png" height="20" width="20" class="mr-2">Dashboard</button></div>
+                    <div class="card"><button class="nav-link"><img src="closed.jpeg" height="20" width="20" class="mr-2">Closed Reports</button></div>
+                    <div class="card"><button class="nav-link"><img src="open.png" height="20" width="20" class="mr-2">Open Reports</button></div>
+                    <div class="card"><button class="nav-link"><img src="unass.png" height="20" width="20" class="mr-2">Unassigned Reports</button></div>
+                    <div class="card"><button class="nav-link"><img src="asigned.png" height="20" width="20" class="mr-2">Assigned Reports</button></div>
+                </nav>
+            </aside>
+            <main class="col-md-10 main-content">
+                <header class="mb-4">
+                    <h2>Reports</h2>
+                    <div class="report-header-row">
+                        <p>UserID</p>
+                        <p>Category</p>
+                        <p>Date</p>
+                        <p>Reference Number</p>
+                        <p>Location</p>
+                        <p>Description</p>
+                        <p>Status</p>
+                        <p>Actions</p>
+                    </div>
+                </header>
+                <!-- Report cards will be dynamically added here -->
+            </main>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel">Report Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img id="modalReportImage" src="" alt="Report Image" class="img-fluid">
+                        </div>
+                        <div class="col-md-8" id="modalReportDetails">
+                            <!-- Details will be populated here by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalReportStatus">Status:</label>
+                        <input type="text" id="modalReportStatus" class="form-control" readonly>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
+        import { getStorage, ref as storageRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXpT6oe6SNKk0kHJLePqlMmLnd1kRSWT8",
+            authDomain: "civicalertoriginal.firebaseapp.com",
+            databaseURL: "https://civicalertoriginal-default-rtdb.firebaseio.com",
+            projectId: "civicalertoriginal",
+            storageBucket: "civicalertoriginal.appspot.com",
+            messagingSenderId: "858192785417",
+            appId: "1:858192785417:web:424b1bec909661ab29c8d8",
+            measurementId: "G-KJ0C1TE4JS"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const storage = getStorage(app);
+
+        function fetchSubmittedReports() {
+            const reportsRef = ref(database, 'Make Report Instance');
+            get(reportsRef).then(snapshot => {
+                if (snapshot.exists()) {
+                    const reports = snapshot.val();
+                    console.log('Fetched reports:', reports);
+                    const categoryCards = {};
+                    Object.keys(reports).forEach(reportId => {
+                        const report = reports[reportId];
+                        const category = report.incidentType;
+                        if (!categoryCards[category]) {
+                            categoryCards[category] = [];
+                        }
+                        categoryCards[category].push({ reportId, ...report });
+                    });
+
+                    const mainContent = document.querySelector('.main-content');
+                    mainContent.innerHTML = '';
+
+                    Object.keys(categoryCards).forEach(category => {
+                        const categoryReports = categoryCards[category];
+                        const categoryTitle = document.createElement('h3');
+                        categoryTitle.innerText = category;
+                        mainContent.appendChild(categoryTitle);
+
+                        categoryReports.forEach(report => {
+                            const reportCard = document.createElement('div');
+                            reportCard.classList.add('report-card');
+
+                            const reportInfo = `
+                                <p>${report.userID}</p>
+                                <p>${report.incidentType}</p>
+                                <p>${report.incidentDate}</p>
+                                <p>${report.referenceNo}</p>
+                                <p>${report.incidentLocation}</p>
+                                <p>${report.incidentDesc}</p>
+                                <p>${report.incidentStatus}</p>
+                            `;
+
+                            const actions = `
+                                <button class="btn btn-primary view-report" data-report-id="${report.reportId}">View</button>
+                            `;
+
+                            reportCard.innerHTML = reportInfo + actions;
+                            mainContent.appendChild(reportCard);
+                        });
+                    });
+
+                    document.querySelectorAll('.view-report').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const reportId = e.target.dataset.reportId;
+                            viewReportDetails(reportId);
+                        });
+                    });
+                } else {
+                    console.log('No reports found');
+                }
+            }).catch(error => {
+                console.error('Error fetching reports:', error);
+            });
+        }
+
+        function viewReportDetails(reportId) {
+            const reportRef = ref(database, `Make Report Instance/${reportId}`);
+            get(reportRef).then(snapshot => {
+                if (snapshot.exists()) {
+                    const report = snapshot.val();
+                    const modalReportImage = document.getElementById('modalReportImage');
+                    const modalReportDetails = document.getElementById('modalReportDetails');
+                    const modalReportStatus = document.getElementById('modalReportStatus');
+
+                    modalReportImage.src = '';
+                    modalReportDetails.innerHTML = '';
+
+                    const imageRef = storageRef(storage, `incidentImages/${report.incidentImage}`);
+                    getDownloadURL(imageRef).then(url => {
+                        modalReportImage.src = url;
+                    }).catch(error => {
+                        console.error('Error fetching image:', error);
+                    });
+
+                    modalReportDetails.innerHTML = `
+                        <p><strong>User ID:</strong> ${report.userID}</p>
+                        <p><strong>Category:</strong> ${report.incidentType}</p>
+                        <p><strong>Date:</strong> ${report.incidentDate}</p>
+                        <p><strong>Reference Number:</strong> ${report.referenceNo}</p>
+                        <p><strong>Location:</strong> ${report.incidentLocation}</p>
+                        <p><strong>Description:</strong> ${report.incidentDesc}</p>
+                    `;
+
+                    modalReportStatus.value = report.incidentStatus;
+                    $('#reportModal').modal('show');
+                } else {
+                    console.log('Report not found');
+                }
+            }).catch(error => {
+                console.error('Error fetching report details:', error);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchSubmittedReports();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civic Alert - Assigned Reports</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Css/assignedReports.css"> <!-- Custom CSS should come after Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="module" src="app.js" defer></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="logo.jpg" alt="Civic Alert Logo">
+            <h2>Civic Alert</h2>
+        </div>
+        <div class="profile">
+            <img src="profileicon.jpeg" alt="Profile Picture">
+            <h3>Municipality</h3>
+        </div>
+        <nav class="nav">
+            <div class="card"><button><img src="reports.jpeg" height="20" width="20">Reports</button></div>
+            <div class="card"><button><img src="dashboard.png" height="20" width="20">Dashboard</button></div>
+            <div class="card"><button><img src="closed.jpeg" height="20" width="20">Closed Reports</button></div>
+            <div class="card"><button><img src="opened.jpeg" height="20" width="20">Open Reports</button></div>
+            <div class="card"><button><img src="unassigned.jpeg" height="20" width="20">Unassigned Reports</button></div>
+            <div class="card"><button><img src="asigned.png" height="20" width="20">Assigned Reports</button></div>
+        </nav>
+        <button class="logout">Log Out</button>
+    </div>
+    <div class="content">
+        <h1>Assigned Reports</h1>
+        <div id="reports-container"></div>
+    </div>
+
+    <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel">Report Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img id="modalReportImage" src="" alt="Report Image" class="img-fluid">
+                        </div>
+                        <div class="col-md-8" id="modalReportDetails">
+                            <!-- Details will be populated here by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalReportStatus">Status:</label>
+                        <select id="modalReportStatus" class="form-control">
+                            <option value="Submitted">Submitted</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalReportImageUpload">Upload Image:</label>
+                        <input type="file" id="modalReportImageUpload" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="updateReportStatus">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
